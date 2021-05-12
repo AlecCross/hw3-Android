@@ -1,182 +1,95 @@
-package com.example.userlist;//package com.example.app3;
-
-import android.graphics.Color;
-
-import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
+package com.example.userlist;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.userlist.R;
+import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Random;
 
-/**
- * Class Film - Содержит информацию о фильме. Предназначен быть
- * одним элементом в наборе данных Адаптера Данных для списка
- * android.widget.ListView
- * ---------------------------------------------------------------------
- */
-class	Film
-{
+class User {
     // ----- Class constants -----------------------------------------------
-    /**
-     * Название фильма
-     */
-    public					String	title;
+    //    - Id ресурса с аватаром
+    //public int id;
+    //- Имя
+    public String firstName;
+    //- Фамилия
+    public String lastName;
+    //- Возраст (хранить в формате long UTC)
+    public Integer age;
+    //- Страна
+    public String country;
+    //- Город
+    public String city;
 
-    /**
-     * Жанр фильма
-     */
-    public					String	genre;
-
-    /**
-     * Год выпуска фильма
-     */
-    public					int		year;
 
     // ----- Class methods -------------------------------------------------
-    public	Film(String title, String genre, int year)
-    {
-        this.title	= title;
-        this.genre	= genre;
-        this.year	= year;
+    public User(String firstName, String lastName, Integer age, String country, String city) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.country = country;
+        this.city = city;
     }
 
     @Override
-    public	String	toString()
-    {
-        return	"Title : " + this.title + ", Genre : " + this.genre + ", Year : " + this.year;
+    public String toString() {
+        return "Name : " + this.firstName + " " + this.lastName + ", Age : " + this.age + ",  " + this.country + ",  " + this.city;
     }
 }
 
-public class MainActivity extends AppCompatActivity
-{
-    // ----- Class members -------------------------------------------------
-    /**
-     * Список фильмов
-     */
-    private					ListView	lvFilms;
+public class MainActivity extends AppCompatActivity {
 
-    /**
-     * Цвет фона не выбранного элемента списка
-     */
-    private 				int			nrmlColor	= Color.rgb(0xED, 0xE2, 0x75);
 
-    /**
-     * Цвет фона выбранного элемента списка
-     */
-    private					int			slctColor	= Color.rgb(0xE2, 0xA7, 0x6F);
-
-    /**
-     * Индекс выбранного элемента списка
-     */
-    private					int			curItem		= -1;
-
-    /**
-     * Ссылка на виджет текущего выбранного элемента списка
-     */
-    private					View		curView		= null;
-
-    // ----- Class methods -------------------------------------------------
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
+        // набор данных, которые свяжем со списком
+        String[] firstNames = {"Ricardo", "Juan", "Anderson", "Edson", "Лиото", "Royce", "Vicente", "Michel", "Nate", "Tony"};
+        String[] lastNames = {"Milos", "Borja", "Silva", "Barbosa", "Мачида", "Gracie", "Luke", "Pereira", "Diaz", "Ferguson"};
+        String[] countries = {"Гваделупа", "Аргентина", "Колумбия"};
+        String[] cities1 = {"Бас-Тер", "Пуэнт-а-Питр", "Мари-Галант", "Ла-Дезирад", "Ле-Сент"};
+        String[] cities2 = {"Буэнос-Айрес", "Кордова", "Росарио", "Мар-дель-Плата", "Сан-Мигель-де-Тукуман"};
+        String[] cities3 = {"Богота", "Медельин", "Кали", "Барранкилья", "Картахена"};
+
+        ArrayList<User> users = new ArrayList<>();
+//        users.add(new User("firstName1", "lastname1", 1, "Гваделупа1", "ывпвп1"));
+//        users.add(new User("firstName2", "lastname2", 3, "Гваделупа2", "ывпвп2"));
+//        users.add(new User("firstName3", "lastname3", 2, "Гваделупа3", "ывпвп3"));
+//        users.add(new User("firstName4", "lastname4", 4, "Гваделупа4", "ывпвп4"));
+
+        for (int i = 0; i <= 5; i++) {
+            Random rand = new Random();
+            //int randomName = minimum + rand.nextInt((maximum - minimum) + 1);
+            int randomFirstName = 0 + rand.nextInt((10 - 0));
+            int randomLastName = 0 + rand.nextInt((10 - 0));
+            int randomCountry = 0 + rand.nextInt((3 - 0));
+            int randomCity = 0 + rand.nextInt((5 - 0));
+
+            if (randomCountry == 0) {
+                users.add(new User(firstNames[randomFirstName], lastNames[randomLastName], 1, countries[randomCountry], cities1[randomCity]));
+//                users.add(new User(firstNames[1], lastNames[1], 1, countries[1], cities1[1]));
+            } else if (randomCountry == 1) {
+                users.add(new User(firstNames[randomFirstName], lastNames[randomLastName], 1, countries[randomCountry], cities2[randomCity]));
+//                users.add(new User(firstNames[2], lastNames[2], 2, countries[2], cities2[4]));
+            } else {
+                users.add(new User(firstNames[randomFirstName], lastNames[randomLastName], 1, countries[randomCountry], cities3[randomCity]));
+//                users.add(new User(firstNames[3], lastNames[3], 3, countries[3], cities3[4]));
+            }
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // ----- Инициализация поля lvFilms ------------------------------------
-        this.lvFilms	= (ListView)	this.findViewById(R.id.lvFilms);
+        // получаем элемент ListView
+        ListView countriesList = (ListView) findViewById(R.id.countriesList);
 
-        // ----- Создание коллекции фильмов ------------------------------------
-        ArrayList<Film>		films	= new ArrayList<>();
+        // создаем адаптер
+        ArrayAdapter<User> adapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, users);
 
-//		films.add(new Film("Марсианин",			"Фантастика",	2015));
-//		films.add(new Film("Стив Джобс",		"Биография",	2015));
-//		films.add(new Film("Выживший",			"Драма",		2015));
-//		films.add(new Film("Сестры",			"Комедия",		2016));
-//		films.add(new Film("Лес призраков",		"Ужасы",		2016));
-//		films.add(new Film("Телохранитель",		"Триллер",		2016));
-//		films.add(new Film("5-ая волна",		"Фантастика",	2016));
-//		films.add(new Film("Последний обряд",	"Ужасы",		2016));
-//		films.add(new Film("Новогодний отрыв",	"Комедия",		2015));
-//		films.add(new Film("Джой",				"Биография",	2016));
-//		films.add(new Film("Строго на запад",	"Вестерн",		2015));
-//		films.add(new Film("Статус: Свободен",	"Мелодрама",	2016));
-//		films.add(new Film("Кунг-Фу Панда 3",	"Мультфильм",	2016));
-//		films.add(new Film("Кукла",				"Ужасы",		2016));
-//		films.add(new Film("И грянул гром",		"Исторический",	2016));
-//		films.add(new Film("Защитник",			"Спорт",		2015));
-//		films.add(new Film("Затмение",			"Триллер",		2015));
-//		films.add(new Film("Дедпул",			"Приключения",	2016));
-//		films.add(new Film("Лазурный берег",	"Мелодрама",	2015));
-//		films.add(new Film("Запретная зона",	"Боевик",		2015));
-
-//        for (int i = 0; i < 50; i++)
-//        {
-//            films.add(new Film("Фильм " + (i + 1), "Жанр " + (i + 1), 2000 + i % 15));
-//        }
-
-        // ----- Создание адаптера Данных и назначение его списку lvFilms ------
-        ArrayAdapter<Film>	adapter	= new ArrayAdapter<Film>(this,R.layout.film_item, R.id.tvTitle, films)
-        {
-            @Override
-            public	View	getView(int position, View convertView, ViewGroup parent)
-            {
-                View	view	= super.getView(position, convertView, parent);
-
-                // ----- Получение ссылки на объект Film который отображатся в этом виджете
-                Film	F		= this.getItem(position);
-
-                // ----- Получение ссылок на виджеты TextView для отображения в них информации о фильме
-                TextView	tvTitle		= (TextView)	view.findViewById(R.id.tvTitle);
-                TextView	tvGenre		= (TextView)	view.findViewById(R.id.tvGenre);
-                TextView	tvYear		= (TextView)	view.findViewById(R.id.tvYear);
-
-                // ----- Запись в виджеты TextView информации о текущем фильме ----------
-                tvTitle.setText(F.title);
-                tvGenre.setText(F.genre);
-                tvYear.setText(String.valueOf(F.year));
-
-                // ----- Подсветка отмеченного элемента списка --------------------------
-                if (position == MainActivity.this.curItem)
-                {
-                    view.setBackgroundColor(MainActivity.this.slctColor);
-                }
-                else
-                {
-                    view.setBackgroundColor(MainActivity.this.nrmlColor);
-                }
-                return	view;
-            }
-        };
-
-        this.lvFilms.setAdapter(adapter);
-
-        // ----- Назначение обработчика события клика по элементу списка -------
-        this.lvFilms.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                // ----- Снимаем выделение с предыдущего выделенного элемента ----------
-                if (MainActivity.this.curItem != -1)
-                {
-                    MainActivity.this.curView.setBackgroundColor(MainActivity.this.nrmlColor);
-                }
-
-                // ----- Устанавливаем выделение на текущий элемент списка -------------
-                MainActivity.this.curItem	= position;
-                MainActivity.this.curView	= view;
-                MainActivity.this.curView.setBackgroundColor(MainActivity.this.slctColor);
-            }
-        });
+        // устанавливаем для списка адаптер
+        countriesList.setAdapter(adapter);
     }
 }
